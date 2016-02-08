@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+
+    <style>
+        body {
+            background: black;
+            margin: 0;
+        }
+
+        *, *:before, *:after {
+            -webkit-box-sizing: inherit;
+            -moz-box-sizing: inherit;
+            box-sizing: inherit;
+        }
+
+        #wrapper {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+            #wrapper video {
+                object-fit: cover;
+                width: 100%;
+            }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <video autoplay loop id="video">
+            <source src="" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script language="javascript">
+
+        var _gifs, _video, _source;
+
+        function changeGIF() {
+            
+            var index = Math.floor((Math.random() * _gifs.length) + 1);
+            var url = _gifs[index].images.looping.mp4;
+
+            _source.attr('src', url);
+            _video.load();
+        }
+
+        $(function () {
+            
+            _video = $("#video");
+            _source = $("source", _video);
+
+            $.ajax({
+                url: "http://api.giphy.com/v1/gifs/search?q=pig&api_key=dc6zaTOxFJmzC",
+                context: document.body
+            }).done(function (response) {
+                _gifs = response.data;
+                changeGIF();
+                _video.click(function() {
+                    changeGIF();
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>
