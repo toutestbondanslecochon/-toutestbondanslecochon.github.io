@@ -63,11 +63,10 @@
                 context: document.body
             }).done(function (response) {
 
-                _offset += _limit + 1;
+                _offset += _limit;
                 _gifs = _gifs.concat(response.data);
 
                 if (_totalcount === 0) {
-                    debugger;
 
                     changeGIF();
                     
