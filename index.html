@@ -44,7 +44,7 @@
 
         function changeGIF() {
             
-            var index = Math.floor((Math.random() * _gifs.length) + 1);
+            var index = Math.floor(Math.random() * _gifs.length);
             var url = _gifs[index].images.looping.mp4;
 
             _source.attr('src', url);
