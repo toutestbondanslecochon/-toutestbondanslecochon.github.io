@@ -40,7 +40,8 @@
     <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
     <script language="javascript">
 
-        var _gifs, _video, _source;
+        var _gifs = [];
+        var _video, _source, _totalcount = 0, _offset = 0, _limit = 100;
 
         function changeGIF() {
             
@@ -49,6 +50,34 @@
 
             _source.attr('src', url);
             _video.load();
+            
+            if (_offset + 100 < _totalcount) {
+
+                loadGIFS();
+            }
+        }
+
+        function loadGIFS() {
+            $.ajax({
+                url: "http://api.giphy.com/v1/gifs/search?q=pig&api_key=dc6zaTOxFJmzC&limit=" + _limit + "&offset=" + _offset,
+                context: document.body
+            }).done(function (response) {
+
+                _offset += _limit + 1;
+                _gifs = _gifs.concat(response.data);
+
+                if (_totalcount === 0) {
+                    debugger;
+
+                    changeGIF();
+                    
+                    _totalcount = response.pagination.total_count;
+
+                    _video.click(function() {
+                        changeGIF();
+                    });
+                }
+            });
         }
 
         $(function () {
@@ -56,16 +85,7 @@
             _video = $("#video");
             _source = $("source", _video);
 
-            $.ajax({
-                url: "http://api.giphy.com/v1/gifs/search?q=pig&api_key=dc6zaTOxFJmzC",
-                context: document.body
-            }).done(function (response) {
-                _gifs = response.data;
-                changeGIF();
-                _video.click(function() {
-                    changeGIF();
-                });
-            });
+            loadGIFS();
         });
 
     </script>
